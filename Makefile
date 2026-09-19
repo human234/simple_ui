@@ -1,11 +1,15 @@
 # HMI Docker build wrappers.
 #
-# Runs west commands inside the official Zephyr developer image. Use these
-# from anywhere inside your west workspace: the workspace root (the
+# Runs west commands inside the prebuilt HMI image (official Zephyr
+# developer image + STM32CubeProgrammer CLI, so `west flash` works). Use
+# these from anywhere inside your west workspace: the workspace root (the
 # directory containing zephyr/) is located automatically and mounted at
 # /workdir, so builds work identically on Linux, macOS, and Windows.
+#
+# Rebuild the image when needed (build context = this repo root):
+#   docker build -f docker/Dockerfile -t ghcr.io/human234/hmi-build:0.1.1 .
 
-IMAGE   ?= ghcr.io/zephyrproject-rtos/zephyr-build:v0.29.3
+IMAGE   ?= ghcr.io/human234/hmi-build:0.1.1
 BOARD   ?= nucleo_g474re
 APP     ?= modules/hmi/samples/gauge_demo
 
@@ -17,7 +21,7 @@ WORKSPACE := $(shell D=$$(pwd); while [ ! -d "$$D/zephyr" ] && [ "$$D" != "/" ];
 help:
 	@echo "make build   - build the HMI gauge demo (nucleo_g474re) in Docker"
 	@echo "make flash   - flash the last build to the board (needs USB passthrough)"
-	@echo "make shell   - open an interactive shell in the Zephyr Docker image"
+	@echo "make shell   - open an interactive shell in the HMI Docker image"
 
 build:
 	@if [ ! -d "$(WORKSPACE)/zephyr" ]; then \

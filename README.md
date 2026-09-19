@@ -12,7 +12,10 @@ Kconfig                  CONFIG_HMI gate + required LVGL selects
 include/hmi/             public headers (single entry point: <hmi/hmi.h>)
 src/                     library sources
 samples/gauge_demo/      runnable example app (nucleo_g474re + ILI9488)
-docker/                  pinned Zephyr Docker image + docker-compose
+docker/                  Dockerfile + compose for the prebuilt HMI image
+                         (Zephyr tools + STM32CubeProgrammer CLI)
+                         + auto-install.xml + fetch-stm32cubeprog.ps1
+                         (how the one-time ST install tree is produced)
 build.ps1 / build.cmd    Windows build/flash wrappers (no toolchain needed)
 flash.ps1 / flash.cmd
 Makefile                 Linux / WSL build/flash wrappers
@@ -20,10 +23,11 @@ Makefile                 Linux / WSL build/flash wrappers
 
 ## Windows users (Docker)
 
-No Zephyr SDK install is required: the official
-`ghcr.io/zephyrproject-rtos/zephyr-build:v0.29.3` image bundles the SDK
-(1.0.x) and west. See [README-WINDOWS.md](README-WINDOWS.md) for the full
-Docker Desktop walkthrough (build, flash via `usbipd-win`, troubleshooting).
+No Zephyr SDK install is required: the prebuilt HMI image
+`ghcr.io/human234/hmi-build:0.1.1` bundles the Zephyr SDK (1.0.x), `west`,
+and the STM32CubeProgrammer CLI (so `west flash` works in-container too).
+See [README-WINDOWS.md](README-WINDOWS.md) for the full Docker Desktop
+walkthrough (build, flash via `usbipd-win`, troubleshooting).
 
 ## Public API
 

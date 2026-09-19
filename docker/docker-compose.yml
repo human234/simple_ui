@@ -1,9 +1,11 @@
-# One-command build for the HMI gauge demo using the official Zephyr
-# developer image. Works on any host that runs Docker (Windows via Docker
-# Desktop with the WSL2 backend, Linux, macOS).
+# One-command build for the HMI gauge demo using the prebuilt HMI image
+# (official Zephyr developer image + STM32CubeProgrammer CLI). Works on any
+# host that runs Docker (Windows via Docker Desktop with the WSL2 backend,
+# Linux, macOS).
 #
-# The image bundles the Zephyr SDK and all build tools; the west workspace
-# (the directory containing zephyr/ and modules/) is mounted at /workdir.
+# The image bundles the Zephyr SDK, all build tools, and the
+# STM32CubeProgrammer CLI so `west flash` works too; the west workspace (the
+# directory containing zephyr/ and modules/) is mounted at /workdir.
 #
 # Usage (from anywhere; the sample path inside the module is used):
 #   PowerShell:  $env:WORKSPACE = (Get-Location  # must be the workspace root
@@ -13,9 +15,11 @@
 #
 # Or simply use the provided wrappers (Makefile / build.ps1 / build.cmd),
 # which locate the workspace root automatically.
+# Rebuild locally when needed (build context = this repo root):
+#   docker build -f docker/Dockerfile -t ghcr.io/human234/hmi-build:0.1.1 .
 services:
   hmi:
-    image: ghcr.io/zephyrproject-rtos/zephyr-build:v0.29.3
+    image: ghcr.io/human234/hmi-build:0.1.1
     working_dir: /workdir
     init: true
     volumes:

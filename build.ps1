@@ -1,14 +1,14 @@
 <#
 .SYNOPSIS
-    Build (or flash) the HMI gauge demo inside the official Zephyr Docker
-    image, from any directory inside your west workspace.
+    Build (or flash) the HMI gauge demo inside the prebuilt HMI Docker image
+    (official Zephyr image + STM32CubeProgrammer CLI), from any directory
+    inside your west workspace.
 
 .DESCRIPTION
     Locates the west workspace root (the first directory walking up that
-    contains zephyr/), mounts it into the zephyr-build image at /workdir,
-    and runs `west build`. Pass -Flash to run `west flash` instead
-    (requires the ST-Link probe to be visible in the container, see
-    README-WINDOWS.md).
+    contains zephyr/), mounts it into the HMI image at /workdir, and runs
+    `west build`. Pass -Flash to run `west flash` instead (requires the
+    ST-Link probe to be visible in the container, see README-WINDOWS.md).
 
     Requires: Docker Desktop (WSL2 backend). No Zephyr toolchain needed.
 
@@ -25,7 +25,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$Image = "ghcr.io/zephyrproject-rtos/zephyr-build:v0.29.3"
+$Image = "ghcr.io/human234/hmi-build:0.1.1"
 
 function Find-WorkspaceRoot {
     $dir = [System.IO.DirectoryInfo](Get-Location).Path
