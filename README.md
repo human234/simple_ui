@@ -12,7 +12,18 @@ Kconfig                  CONFIG_HMI gate + required LVGL selects
 include/hmi/             public headers (single entry point: <hmi/hmi.h>)
 src/                     library sources
 samples/gauge_demo/      runnable example app (nucleo_g474re + ILI9488)
+docker/                  pinned Zephyr Docker image + docker-compose
+build.ps1 / build.cmd    Windows build/flash wrappers (no toolchain needed)
+flash.ps1 / flash.cmd
+Makefile                 Linux / WSL build/flash wrappers
 ```
+
+## Windows users (Docker)
+
+No Zephyr SDK install is required: the official
+`ghcr.io/zephyrproject-rtos/zephyr-build:v0.29.3` image bundles the SDK
+(1.0.x) and west. See [README-WINDOWS.md](README-WINDOWS.md) for the full
+Docker Desktop walkthrough (build, flash via `usbipd-win`, troubleshooting).
 
 ## Public API
 
@@ -33,22 +44,33 @@ extern uint32_t colorscheme[];
 
 ## Consuming the module
 
-1. Make the module visible to your build:
+**Windows without any Zephyr install?** Read
+[README-WINDOWS.md](README-WINDOWS.md) — builds via Docker only.
 
-   `apps/HMI` in this workspace. From any app add this **before**
-   `find_package(Zephyr REQUIRED)`:
+The easiest way is the ready-made west workspace manifest
+([`human234/hmi-workspace`](https://github.com/human234/hmi-workspace)),
+which pins Zephyr `v4.4.2` and installs this repo at `modules/hmi`:
+
+```sh
+west init -m https://github.com/human234/hmi-workspace hmi-workspace
+cd hmi-workspace && west update
+west build -p always -b nucleo_g474re modules/hmi/samples/gauge_demo
+```
+
+Or add the module to an existing west workspace by hand:
+
+1. Make the module visible to your build:
 
    ```cmake
    set(ZEPHYR_EXTRA_MODULES <path-to-apps/HMI>)
    ```
 
-   or pass it on the command line:
+   before `find_package(Zephyr REQUIRED)` in your app's `CMakeLists.txt`,
+   or from the command line:
 
    ```sh
    west build -b nucleo_g474re <app> -- -DZEPHYR_EXTRA_MODULES=<path-to-apps/HMI>
    ```
-
-   (A west manifest project is the alternative once this is a git repo.)
 
 2. Enable it in your `prj.conf`:
 

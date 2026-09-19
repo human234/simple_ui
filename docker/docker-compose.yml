@@ -1,0 +1,30 @@
+# One-command build for the HMI gauge demo using the official Zephyr
+# developer image. Works on any host that runs Docker (Windows via Docker
+# Desktop with the WSL2 backend, Linux, macOS).
+#
+# The image bundles the Zephyr SDK and all build tools; the west workspace
+# (the directory containing zephyr/ and modules/) is mounted at /workdir.
+#
+# Usage (from anywhere; the sample path inside the module is used):
+#   PowerShell:  $env:WORKSPACE = (Get-Location  # must be the workspace root
+#   cmd:         set WORKSPACE=%CD%
+#   Linux shell: export WORKSPACE=$(pwd)
+#   docker compose -f modules/hmi/docker/docker-compose.yml run --rm hmi
+#
+# Or simply use the provided wrappers (Makefile / build.ps1 / build.cmd),
+# which locate the workspace root automatically.
+services:
+  hmi:
+    image: ghcr.io/zephyrproject-rtos/zephyr-build:v0.29.3
+    working_dir: /workdir
+    init: true
+    volumes:
+      - ${WORKSPACE:?Set WORKSPACE to the west workspace root (the dir with zephyr/)}:/workdir
+    command:
+      - west
+      - build
+      - -b
+      - nucleo_g474re
+      - -p
+      - always
+      - modules/hmi/samples/gauge_demo
