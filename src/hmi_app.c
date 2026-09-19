@@ -6,6 +6,8 @@
 #include <zephyr/logging/log.h>
 #include <lvgl.h>
 
+#include <hmi/hmi_app.h>
+
 LOG_MODULE_REGISTER(hmi_app, LOG_LEVEL_INF);
 
 static const struct device *display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));

@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "hmi_gauge.h"
+#include <hmi/hmi_gauge.h>
 
 typedef struct {
     lv_obj_t * container;

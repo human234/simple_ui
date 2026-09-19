@@ -1,0 +1,20 @@
+menuconfig HMI
+    bool "HMI library"
+    imply LVGL
+    select LV_USE_ARC
+    select LV_USE_LABEL
+    select LV_FONT_MONTSERRAT_12
+    select LV_FONT_MONTSERRAT_18
+    select LV_FONT_MONTSERRAT_22
+    select LV_FONT_MONTSERRAT_28
+    select LV_FONT_MONTSERRAT_32
+    select LV_FONT_MONTSERRAT_38
+    help
+      Gauge-style HMI widgets and app lifecycle (hmi_init/hmi_show)
+      built on the LVGL module. Consumers just set CONFIG_HMI=y and
+      #include <hmi/hmi.h>.
+
+      Requires the LVGL module to be present in the workspace; the
+      required LVGL widgets and fonts are selected here. Display
+      specific settings (color depth, memory pool, VDB size) and the
+      zephyr,display chosen node remain the consumer's responsibility.
